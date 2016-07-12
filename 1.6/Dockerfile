@@ -16,8 +16,8 @@ COPY config_files/docker-customization_run.sh /tmp/docker-customization_run.sh
 RUN chmod u+x /tmp/docker-customization_run.sh
 
 
-RUN sed -i -e"s/^exec\s*apache2\s*-DFOREGROUND/#exec apache2 -DFOREGROUND/" /tmp/docker_run.sh
+RUN sed -i -e"s/^exec\s*apache2-foreground/#exec apache2-foreground/" /tmp/docker_run.sh
 RUN /tmp/docker_run.sh
-RUN sed -i -e"s/^#exec\s*apache2\s*-DFOREGROUND/exec apache2 -DFOREGROUND/" /tmp/docker_run.sh
+RUN sed -i -e"s/^#exec\s*apache2-foreground/exec apache2-foreground/" /tmp/docker_run.sh
 
 CMD ["/tmp/docker-customization_run.sh"]
