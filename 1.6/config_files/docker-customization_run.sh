@@ -9,11 +9,7 @@ mysql -h $DB_SERVER -P $DB_PORT -u $DB_USER -p$DB_PASSWD -D$DB_NAME -e "${req}"
 
 if [ $ID_MODULE -ne 0 ]; then
 	echo "\n* Requesting module $ID_MODULE ...";
-	curl "$GET_FILE_MODULE$ID_MODULE" >> /var/www/html/modules/module.zip
-	echo "Unzip the module";
-	cd /var/www/html/modules/
-	unzip -q module.zip
-	cd /var/www/html
+	bash /tmp/get-module.sh&
 fi
 
 bash /tmp/docker_run.sh
