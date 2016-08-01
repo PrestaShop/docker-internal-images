@@ -1,4 +1,4 @@
-FROM prestashop/prestashop:1.6
+FROM prestashop/prestashop:1.7
 
 MAINTAINER Thomas Nabord <thomas.nabord@prestashop.com>
 
