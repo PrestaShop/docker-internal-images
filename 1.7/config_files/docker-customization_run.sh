@@ -12,8 +12,4 @@ if [ -n "$ID_MODULE" ]; then
 	bash /tmp/get-module.sh&
 fi
 
-if [ -f ./app/config/parameters.php  ]; then
-	rm ./app/config/parameters.php
-fi
-
 bash /tmp/docker_run.sh
