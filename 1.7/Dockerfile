@@ -17,7 +17,6 @@ COPY config_files/docker-customization_run.sh /tmp/docker-customization_run.sh
 COPY config_files/get-module.sh /tmp/get-module.sh
 RUN chmod u+x /tmp/docker-customization_run.sh /tmp/get-module.sh
 
-RUN rm /var/www/html/app/config/parameters.php 2> /dev/null
 
 RUN sed -i -e"s/^exec\s*apache2-foreground/#exec apache2-foreground/" /tmp/docker_run.sh
 RUN /tmp/docker_run.sh
