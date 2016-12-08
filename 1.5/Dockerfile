@@ -2,6 +2,7 @@ FROM prestashop/prestashop:1.5
 
 MAINTAINER Thomas Nabord <thomas.nabord@prestashop.com>
 
+ENV GET_USER ""
 ENV GET_FILE_MODULE ""
 ENV ID_MODULE 0
 
