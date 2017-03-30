@@ -10,6 +10,19 @@ ENV PS_INSTALL_AUTO 1
 ENV PS_DEV_MODE 1
 ENV PS_ADMIN_FOLDER admin-dev
 ENV PS_INSTALL_FOLDER install-dev
+ENV DB_SERVER 127.0.0.1
+
+# MySQL installation
+# Avoid MySQL questions during installation
+ENV DEBIAN_FRONTEND noninteractive
+RUN echo mysql-server-5.6 mysql-server/root_password password $DB_PASSWD | debconf-set-selections
+RUN echo mysql-server-5.6 mysql-server/root_password_again password $DB_PASSWD | debconf-set-selections
+RUN apt-get update \
+	&& apt-get install -y mysql-server \
+    && rm -rf /var/lib/apt/lists/*
+# MySQL configuration
+RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
+EXPOSE 3306
 
 COPY config_files/docker-customization_run.sh /tmp/
 
