@@ -24,10 +24,13 @@ RUN apt-get update \
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
 EXPOSE 3306
 
+RUN service mysql start \
+	&& mysqladmin -h $DB_SERVER -P $DB_PORT -u $DB_USER -p$DB_PASSWD create $DB_NAME --force
+
 COPY config_files/docker-customization_run.sh /tmp/
 
 RUN sed -i -e"s/^exec\s*apache2\s*-DFOREGROUND/#exec apache2 -DFOREGROUND/" /tmp/docker_run.sh
-RUN /tmp/docker_run.sh
+RUN service mysql start && /tmp/docker_run.sh
 RUN sed -i -e"s/^#exec\s*apache2\s*-DFOREGROUND/exec apache2 -DFOREGROUND/" /tmp/docker_run.sh
 
 CMD ["/tmp/docker-customization_run.sh"]
