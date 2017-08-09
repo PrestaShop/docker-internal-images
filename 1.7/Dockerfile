@@ -19,9 +19,8 @@ ENV DB_SERVER 127.0.0.1
 ENV DEBIAN_FRONTEND noninteractive
 RUN echo mysql-server-5.6 mysql-server/root_password password $DB_PASSWD | debconf-set-selections
 RUN echo mysql-server-5.6 mysql-server/root_password_again password $DB_PASSWD | debconf-set-selections
-RUN apt-get update \
-	&& apt-get install -y mysql-server \
-    && rm -rf /var/lib/apt/lists/*
+RUN curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash -s -- --mariadb-server-version=mariadb-10.1 \
+	&& apt install -y mariadb-server
 # MySQL configuration
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
 EXPOSE 3306
