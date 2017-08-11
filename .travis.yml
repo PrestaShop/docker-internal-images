@@ -18,6 +18,7 @@ before_script:
 script:
   - docker build -t "$image" .
   - ~/official-images/test/run.sh "$image"
+  - docker run -tid --name prestashop $image && docker exec -ti prestashop cat /var/www/html/config/settings.inc.php
 
 after_script:
   - docker images
