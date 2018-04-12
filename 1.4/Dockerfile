@@ -10,7 +10,7 @@ ENV PS_INSTALL_AUTO 1
 ENV PS_DEV_MODE 1
 ENV PS_ADMIN_FOLDER admin-dev
 ENV PS_INSTALL_FOLDER install-dev
-ENV DB_SERVER 127.0.0.1
+ENV DB_SERVER localhost
 
 # MySQL installation
 # Avoid MySQL questions during installation
