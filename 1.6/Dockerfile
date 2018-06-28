@@ -13,6 +13,7 @@ ENV PS_COUNTRY fr
 ENV PS_FOLDER_ADMIN admin-dev
 ENV PS_FOLDER_INSTALL install-dev
 ENV DB_SERVER localhost
+ENV DB_USER macfly
 
 # MySQL installation
 # Avoid MySQL questions during installation
@@ -23,10 +24,12 @@ RUN apt update \
   && apt install -y mysql-server \
   && rm -rf /var/lib/apt/lists/*
 # MySQL configuration
-RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
+RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf
 EXPOSE 3306
 
+RUN echo '[mysql.server]\nservice-startup-timeout = -1' >> /etc/mysql/conf.d/startup.cnf
 RUN service mysql start \
+&& mysql -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASSWD'; GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'localhost'; FLUSH PRIVILEGES;" mysql \
 	&& mysqladmin -h $DB_SERVER -P $DB_PORT -u $DB_USER -p$DB_PASSWD create $DB_NAME --force
 
 COPY config_files/my-minimal.cnf /etc/mysql/conf.d/my-minimal.cnf
