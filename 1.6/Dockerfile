@@ -1,4 +1,4 @@
-FROM prestashop/prestashop:1.6
+FROM prestashop/prestashop:1.6-7.1-apache
 
 MAINTAINER Thomas Nabord <thomas.nabord@prestashop.com>
 
