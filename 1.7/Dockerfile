@@ -1,4 +1,4 @@
-FROM prestashop/prestashop:1.7
+FROM prestashop/prestashop:1.7-7.2-apache
 
 MAINTAINER Thomas Nabord <thomas.nabord@prestashop.com>
 
@@ -41,5 +41,7 @@ RUN chmod u+x /tmp/docker-customization_run.sh /tmp/get-module.sh
 RUN sed -i -e"s/^exec\s*apache2-foreground/#exec apache2-foreground/" /tmp/docker_run.sh
 RUN service mysql start && /tmp/docker_run.sh
 RUN sed -i -e"s/^#exec\s*apache2-foreground/exec apache2-foreground/" /tmp/docker_run.sh
+
+RUN rm -rf /var/www/html/modules/gamification
 
 CMD ["/tmp/docker-customization_run.sh"]
