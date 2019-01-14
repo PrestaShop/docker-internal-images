@@ -13,7 +13,7 @@ PrestaShop is pre-installed during the build, and all existing languages are bei
 For each PrestaShop major version, we chose the best compromise between reliability and speed of PHP.
 * PrestaShop 1.5 with PHP 5.6
 * PrestaShop 1.6 with PHP 7.1
-* PrestaShop 1.7 with PHP 7.2
+* PrestaShop 1.7 / Nightly with PHP 7.2
 
 ## Installation
 
@@ -23,7 +23,7 @@ Images are being stored by default on Docker hub. They can be downloaded with:
 docker pull prestashop/docker-internal-images[:tag]
 ```
 
-Possible values for the tag are: `1.5`, `1.6`, `1.7`. Not providing this parameter will fallback on PrestaShop 1.7.
+Possible values for the tag are: `1.5`, `1.6`, `1.7`, `nightly`. Not providing this parameter will fallback on PrestaShop 1.7.
 
 ## Runnig this image
 
@@ -35,3 +35,19 @@ This example runs a pre-installed PrestaShop 1.7 on the port 8003 of the local m
 ```bash
 docker run -ti -p 8003:80 -e PS_DOMAIN=localhost:8003 prestashop/docker-internal-images:1.7
 ```
+## Contributing
+
+Changes can be suggested on https://github.com/PrestaShop/docker-internal-images.
+
+During the development, you may try to build new local images by running the following commands:
+
+```bash
+docker build -t prestashop/docker-internal-images:1.7 1.7
+docker build -t prestashop/docker-internal-images:1.6 1.6
+docker build -t prestashop/docker-internal-images:1.5 1.5
+docker build -t prestashop/docker-internal-images:nightly nightly
+```
+
+Then follow the step "Running this image" to create a container from these new tags.
+
+Make sure each subfolder got the same improvement or only one tag will be updated.
