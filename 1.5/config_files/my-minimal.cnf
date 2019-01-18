@@ -7,7 +7,7 @@ innodb_fast_shutdown    = 2
 
 skip-innodb_doublewrite
 
-max_connections         = 10
+max_connections         = 20
 query_cache_size	= 0
 key_buffer_size		= 8
 thread_cache_size	= 0
