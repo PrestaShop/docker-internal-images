@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Handle zip download 1.6
+# Handle zip download 1.7
 displayStatusMessage() {
     local curl_error=$1
 
