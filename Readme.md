@@ -8,7 +8,12 @@ This repository provides additional Docker images for a quick deployment of Pres
 
 These Docker files are based on the images [prestashop/prestashop](https://hub.docker.com/r/prestashop/prestashop/).
 With the Apache + PHP server already present, a MySQL server is installed and configured for a small environment (only one user per running website) to avoid too much memory consumption.
-PrestaShop is pre-installed during the build, and all existing languages are being added at the same time.
+
+Each tag of this images has the following content:
+* PrestaShop is pre-installed during the build
+* All existing languages are being added at the same time.
+* One employee per language is created (`demo<iso_code>@prestashop.com`)
+* URL rewriting is enabled
 
 For each PrestaShop major version, we chose the best compromise between reliability and speed of PHP.
 * PrestaShop 1.5 with PHP 5.6
