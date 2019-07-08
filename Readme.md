@@ -30,7 +30,7 @@ docker pull prestashop/docker-internal-images[:tag]
 
 Possible values for the tag are: `1.5`, `1.6`, `1.7`, `nightly`. Not providing this parameter will fallback on PrestaShop 1.7.
 
-## Runnig this image
+## Running this image
 
 To run this images flawlessly on your environment, we advice you to find an available port on the host, then bind it
 to the container and the domain parameter.
