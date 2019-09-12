@@ -38,3 +38,9 @@ foreach (Language::getLanguages() as $language)
 
 echo PHP_EOL.'* Enable url rewriting...'.PHP_EOL;
 Configuration::updateValue('PS_REWRITING_SETTINGS', 1);
+
+// Check parameters.php is available
+
+if (!file_exists('/var/www/html/app/config/parameters.php')) {
+    echo PHP_EOL.'* WARNING: PHP parameters file missing !!!'.PHP_EOL;
+}
