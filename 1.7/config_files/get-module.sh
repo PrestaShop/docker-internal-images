@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Unset ENV variables - conflict during Module installation
+#
+PS_DEV_MODE_ORIGIN=${PS_DEV_MODE}
+unset PS_DEV_MODE
+PS_DEMO_MODE_ORIGIN=${PS_DEMO_MODE}
+unset PS_DEMO_MODE
+
+
 # Handle zip download 1.7
 displayStatusMessage() {
     local curl_error=$1
@@ -22,8 +30,10 @@ displayStatusMessage() {
     echo "${Message}"
 }
 
-# Slipt id in list
+# Split id_module in list
 IFS=', ' read -r -a ID_MODULE_LIST <<< "$ID_MODULE"
+# Split module_name_toinstall in list
+IFS=', ' read -r -a MODULE_NAME_TOINSTALL_LIST <<< "$MODULE_NAME_TOINSTALL"
 
 for index in "${!ID_MODULE_LIST[@]}"
 do
@@ -40,10 +50,55 @@ do
              echo "\n* Unable to download module ${ID_MODULE_LIST[index]} ..."
         else
             echo "\n* Unzipping the module ${ID_MODULE_LIST[index]} ...";
-            unzip -q /var/www/html/modules/module.zip -d /var/www/html/modules/
+            unzip -o -q /var/www/html/modules/module.zip -d /var/www/html/modules/
+	    if [ "$MODULE_NAME_TOINSTALL" == "ALL" ]
+	    then
+	       MODULE_NAME=$(basename $( \
+		       unzip -l modules/module.zip 2>&1 \
+		       | grep -E '^\s+[0-9]+\s+[0-9-]+\s+[0-9:]+' \
+		       | awk -F' ' '{print $4}'| head -1
+			              )
+		        )
+	        cd /var/www/html
+		echo "\n* Installing module ${MODULE_NAME} ..."
+		php bin/console prestashop:module install ${MODULE_NAME}
+	    fi
+
+
             chown -R www-data:www-data /var/www/html/modules/
             rm /var/www/html/modules/module.zip
         fi
     fi
     echo "\n"
 done
+
+# Module installation block 
+#
+if [ "$MODULE_NAME_TOINSTALL" == "ALL" ]
+then
+	echo "\n* Modules have already been installed [ All option ]"
+else
+	for index in "${!MODULE_NAME_TOINSTALL_LIST[@]}"
+	do
+		cd /var/www/html
+		if [  -d "modules/${MODULE_NAME_TOINSTALL_LIST[index]}" ] 
+		then
+			echo "\n* Installing module ${MODULE_NAME_TOINSTALL_LIST[index]} ..."
+			php bin/console prestashop:module install ${MODULE_NAME_TOINSTALL_LIST[index]}
+			CMD_STATUS_CODE=$?
+			if [ ${CMD_STATUS_CODE} != 0 ]
+			then
+				displayStatusMessage ${CMD_STATUS_CODE}
+			fi
+		else
+			echo "\n* module ${MODULE_NAME_TOINSTALL_LIST[index]} is not present on modules directory ..."
+		fi
+	done
+fi
+
+# Restore ENV variables
+export PS_DEV_MODE=${PS_DEV_MODE_ORIGIN}
+unset PS_DEV_MODE_ORIGIN
+export PS_DEMO_MODE=${PS_DEMO_MODE_ORIGIN}
+unset PS_DEMO_MODE_ORIGIN
+
