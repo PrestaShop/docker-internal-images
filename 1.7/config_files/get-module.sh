@@ -31,7 +31,7 @@ displayStatusMessage() {
 }
 
 installModule() {
-    local moduleName = $1
+    local moduleName=$1
 
     echo "\n* Installing module $moduleName ..."
     php bin/console prestashop:module install $moduleName
