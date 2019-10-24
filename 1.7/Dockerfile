@@ -15,6 +15,7 @@ ENV PS_FOLDER_ADMIN admin-dev
 ENV PS_FOLDER_INSTALL install-dev
 ENV DB_SERVER localhost
 ENV DB_USER macfly
+ENV PS_ENABLE_SSL 1
 
 # MySQL installation
 # Avoid MySQL questions during installation
@@ -27,6 +28,13 @@ RUN apt update \
 # MySQL configuration
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf
 EXPOSE 3306
+
+# SSL configuration
+RUN a2enmod ssl
+RUN ln -s $APACHE_CONFDIR/sites-available/default-ssl.conf $APACHE_CONFDIR/sites-enabled/default-ssl.conf
+RUN apt update \
+  && apt install -y ssl-cert \
+  && rm -rf /var/lib/apt/lists/*
 EXPOSE 443
 
 RUN echo '[mysql.server]\nservice-startup-timeout = -1' >> /etc/mysql/conf.d/startup.cnf
