@@ -17,7 +17,7 @@ before_script:
   - image="${image//'/'/-}"
 
 script:
-  - docker build -t "$image" .
+  - docker build --build-arg PS_ALL_LANGUAGES=0 -t "$image" .
   - ~/official-images/test/run.sh "$image"
   - docker run -tid --name prestashop $image && docker exec -ti prestashop cat /var/www/html/config/settings.inc.php
 
