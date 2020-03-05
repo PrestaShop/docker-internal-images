@@ -19,6 +19,7 @@ For each PrestaShop major version, we chose the best compromise between reliabil
 * PrestaShop 1.5 with PHP 5.6
 * PrestaShop 1.6 with PHP 7.1
 * PrestaShop 1.7 / Nightly with PHP 7.2
+* PrestaShop 1.7.7 / Beta with PHP 7.3
 
 ## Installation
 
