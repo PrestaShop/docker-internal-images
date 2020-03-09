@@ -10,7 +10,7 @@ php /tmp/update-domain.php &
 
 if [ "$ID_MODULE" != "0" ]; then
 	echo "\n* Requesting module $ID_MODULE ...";
-	runuser -g www-data -u www-data bash /tmp/get-module.sh&
+	runuser -g www-data -u www-data bash /tmp/get-module.sh
 fi
 
 unset GET_USER
