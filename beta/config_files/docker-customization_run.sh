@@ -8,6 +8,9 @@ req='UPDATE ps_configuration SET value = "'$PS_DOMAIN'" WHERE name IN ("PS_SHOP_
 mysql -h$DB_SERVER -P$DB_PORT -u$DB_USER -p$DB_PASSWD -D$DB_NAME -e "${req}" &
 php /tmp/update-domain.php &
 
+req='UPDATE ps_configuration SET value = "'$PS_ENABLE_SSL'" WHERE name IN ("PS_SSL_ENABLED", "PS_SSL_ENABLED_EVERYWHERE");'
+mysql -h$DB_SERVER -P$DB_PORT -u$DB_USER -p$DB_PASSWD -D$DB_NAME -e "${req}" &
+
 if [ "$ID_MODULE" != "0" ]; then
 	echo "\n* Requesting module $ID_MODULE ...";
 	runuser -g www-data -u www-data bash /tmp/get-module.sh&
