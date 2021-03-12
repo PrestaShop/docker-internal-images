@@ -1,0 +1,34 @@
+name: Docker
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ps-versions: ['1.5', '1.6', '1.7', 'nightly', 'beta']
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Fetch Docker Official
+      run: git clone https://github.com/docker-library/official-images.git ~/official-images
+
+    - name: Set environment variable
+      run: echo "image=prestashop/docker-internal-images:${{ matrix.ps-versions }}" >> $GITHUB_ENV
+
+    - name: Docker Build
+      run: docker build --build-arg INSTALL_LANGUAGES=0 -t "${{ env.image }}" .
+      working-directory: ${{ matrix.ps-versions }}
+
+    - name: Docker Images
+      run: docker images
+
+    - name: Docker Test
+      run: ~/official-images/test/run.sh "${{ env.image }}"
+      working-directory: ${{ matrix.ps-versions }}
+
+    - name: Docker Run
+      run: docker run -d --name prestashop ${{ env.image }} && docker exec prestashop cat /var/www/html/config/settings.inc.php
+      working-directory: ${{ matrix.ps-versions }}
+
