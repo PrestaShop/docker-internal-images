@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "\n* Starting MySQL server ...";
-service mysql start
+service mariadb start
 
 echo "\n* Updating PrestaShop domains ...";
 req='UPDATE ps_configuration SET value = "'$PS_DOMAIN'" WHERE name IN ("PS_SHOP_DOMAIN", "PS_SHOP_DOMAIN_SSL"); UPDATE ps_shop_url SET domain = "'$PS_DOMAIN'", domain_ssl = "'$PS_DOMAIN'";'
