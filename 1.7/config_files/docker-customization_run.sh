@@ -19,4 +19,7 @@ fi
 unset GET_USER
 unset GET_FILE_MODULE
 
+echo "\n* Updating memory limit to ${PHP_MEMORY_LIMIT}M...";
+sed -ie "s/memory_limit\ =\ 256M/memory_limit\ =\ ${PHP_MEMORY_LIMIT}M/g" /usr/local/etc/php/php.ini
+
 bash /tmp/docker_run.sh
