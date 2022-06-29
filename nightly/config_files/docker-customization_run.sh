@@ -20,4 +20,4 @@ fi
 unset GET_USER
 unset GET_FILE_MODULE
 
-bash /tmp/docker_run.sh
+bash /tmp/docker_nightly_run.sh
