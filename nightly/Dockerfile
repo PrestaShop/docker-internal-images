@@ -54,7 +54,7 @@ RUN sed -ie "s/post_max_size\ =\ 20M/post_max_size\ =\ 40M/g" /usr/local/etc/php
 RUN sed -ie "s/upload_max_filesize\ =\ 20M/upload_max_filesize\ =\ 40M/g" /usr/local/etc/php/php.ini
 
 RUN sed -i -e"s/^exec\s*apache2-foreground/#exec apache2-foreground/" /tmp/docker_run.sh
-RUN service mysql start && /tmp/docker_run.sh
+RUN service mysql start && /tmp/docker_nightly_run.sh
 RUN sed -i -e"s/^#exec\s*apache2-foreground/exec apache2-foreground/" /tmp/docker_run.sh
 
 COPY config_files/build/shop-build.php /tmp/build/shop-build.php
