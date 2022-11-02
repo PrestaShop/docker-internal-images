@@ -2,7 +2,7 @@
 
 This repository provides additional Docker images for a quick deployment of PrestaShop.
 
-:warning: They are not designed for a production use.
+:warning: They are not designed for running an e-commerce activity in production.
 
 ## Description
 
