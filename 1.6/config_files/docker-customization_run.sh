@@ -13,4 +13,9 @@ if [ "$ID_MODULE" != "0" ]; then
 	bash /tmp/get-module.sh&
 fi
 
+if [ "$XDEBUG_ENABLED" == "1" ]; then
+	echo "\n* Enabling XDEBUG ...";
+	docker-php-ext-enable xdebug
+fi
+
 bash /tmp/docker_run.sh
