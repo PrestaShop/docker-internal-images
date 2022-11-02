@@ -22,9 +22,6 @@ RUN apt update \
   && apt install -y default-mysql-server \
   && rm -rf /var/lib/apt/lists/*
 
-# XDebug extension
-RUN pecl install xdebug
-
 # MySQL installation
 # Avoid MySQL questions during installation
 RUN echo mysql-server-5.6 mysql-server/root_password password $DB_PASSWD | debconf-set-selections
