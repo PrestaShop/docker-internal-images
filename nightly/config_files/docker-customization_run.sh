@@ -17,6 +17,11 @@ if [ "$ID_MODULE" != "0" ]; then
 	runuser -g www-data -u www-data bash /tmp/get-module.sh&
 fi
 
+if [ "$XDEBUG_ENABLED" == "1" ]; then
+	echo "\n* Enabling XDEBUG ...";
+	docker-php-ext-enable xdebug
+fi
+
 unset GET_USER
 unset GET_FILE_MODULE
 

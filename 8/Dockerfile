@@ -20,14 +20,19 @@ ENV DB_SERVER localhost
 ENV DB_USER macfly
 ENV PS_ENABLE_SSL 1
 
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt update \
+  && apt install -y default-mysql-server ssl-cert \
+  && rm -rf /var/lib/apt/lists/*
+
+# XDebug extension
+RUN pecl install xdebug
+
 # MySQL installation
 # Avoid MySQL questions during installation
-ENV DEBIAN_FRONTEND noninteractive
 RUN echo mysql-server-5.6 mysql-server/root_password password $DB_PASSWD | debconf-set-selections
 RUN echo mysql-server-5.6 mysql-server/root_password_again password $DB_PASSWD | debconf-set-selections
-RUN apt update \
-  && apt install -y default-mysql-server \
-  && rm -rf /var/lib/apt/lists/*
 # MySQL configuration
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/mariadb.conf.d/50-server.cnf
 EXPOSE 3306
@@ -35,9 +40,6 @@ EXPOSE 3306
 # SSL configuration
 RUN a2enmod ssl
 RUN ln -s $APACHE_CONFDIR/sites-available/default-ssl.conf $APACHE_CONFDIR/sites-enabled/default-ssl.conf
-RUN apt update \
-  && apt install -y ssl-cert \
-  && rm -rf /var/lib/apt/lists/*
 EXPOSE 443
 
 RUN echo '[mysql.server]\nservice-startup-timeout = -1' >> /etc/mysql/conf.d/startup.cnf
