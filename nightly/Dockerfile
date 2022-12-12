@@ -26,7 +26,7 @@ RUN apt update \
   && rm -rf /var/lib/apt/lists/*
 
 # XDebug extension
-RUN pecl install xdebug
+RUN pecl install xdebug-3.1.6
 
 # MySQL installation
 # Avoid MySQL questions during installation
