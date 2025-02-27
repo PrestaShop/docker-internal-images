@@ -1,26 +1,24 @@
-FROM prestashop/prestashop:8
+FROM prestashop/prestashop:8-8.1
 
-MAINTAINER Thomas Nabord <thomas.nabord@prestashop.com>
+ENV GET_USER=""
+ENV GET_FILE_MODULE=""
+ENV ID_MODULE=0
+ENV PHP_MEMORY_LIMIT=256
 
-ENV GET_USER ""
-ENV GET_FILE_MODULE ""
-ENV ID_MODULE 0
-ENV PHP_MEMORY_LIMIT 256
-
-ENV PS_HANDLE_DYNAMIC_DOMAIN 0
-ENV PS_INSTALL_AUTO 1
-ENV PS_DEV_MODE 1
-ENV PS_COUNTRY fr
+ENV PS_HANDLE_DYNAMIC_DOMAIN=0
+ENV PS_INSTALL_AUTO=1
+ENV PS_DEV_MODE=1
+ENV PS_COUNTRY=fr
 # Allow some builds (CI for instance) to not install all languages
 ARG INSTALL_LANGUAGES=1
-ENV PS_ALL_LANGUAGES ${INSTALL_LANGUAGES}
-ENV PS_FOLDER_ADMIN admin-dev
-ENV PS_FOLDER_INSTALL install-dev
-ENV DB_SERVER localhost
-ENV DB_USER macfly
-ENV PS_ENABLE_SSL 1
+ENV PS_ALL_LANGUAGES=${INSTALL_LANGUAGES}
+ENV PS_FOLDER_ADMIN=admin-dev
+ENV PS_FOLDER_INSTALL=install-dev
+ENV DB_SERVER=localhost
+ENV DB_USER=macfly
+ENV PS_ENABLE_SSL=1
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update \
   && apt install -y default-mysql-server ssl-cert \

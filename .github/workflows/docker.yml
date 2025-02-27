@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ps-versions: ['1.5', '1.6', '1.7', '8', 'nightly', 'beta']
+        ps-versions: ['1.6', '1.7', '8', 'nightly', 'beta']
     steps:
     - uses: actions/checkout@v2
 
@@ -29,6 +29,6 @@ jobs:
       working-directory: ${{ matrix.ps-versions }}
 
     - name: Docker Run
-      run: docker run -d --name prestashop ${{ env.image }} && docker exec prestashop cat /var/www/html/config/settings.inc.php
+      run: docker run -d --name prestashop ${{ env.image }} && docker exec prestashop bash -c "cat /var/www/html/app/config/parameters.php || cat /var/www/html/config/settings.inc.php"
       working-directory: ${{ matrix.ps-versions }}
 

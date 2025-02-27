@@ -1,32 +1,30 @@
-FROM prestashop/prestashop:nightly-7.2-apache
+FROM prestashop/prestashop:nightly
+ENV GET_USER=""
+ENV GET_FILE_MODULE=""
+ENV ID_MODULE=0
+ENV PHP_MEMORY_LIMIT=256
 
-MAINTAINER Thomas Nabord <thomas.nabord@prestashop.com>
-
-ENV GET_USER ""
-ENV GET_FILE_MODULE ""
-ENV ID_MODULE 0
-
-ENV PS_HANDLE_DYNAMIC_DOMAIN 0
-ENV PS_INSTALL_AUTO 1
-ENV PS_DEV_MODE 1
-ENV PS_COUNTRY fr
+ENV PS_HANDLE_DYNAMIC_DOMAIN=0
+ENV PS_INSTALL_AUTO=1
+ENV PS_DEV_MODE=1
+ENV PS_COUNTRY=fr
 # Allow some builds (CI for instance) to not install all languages
 ARG INSTALL_LANGUAGES=1
-ENV PS_ALL_LANGUAGES ${INSTALL_LANGUAGES}
-ENV PS_FOLDER_ADMIN admin-dev
-ENV PS_FOLDER_INSTALL install-dev
-ENV DB_SERVER localhost
-ENV DB_USER macfly
-ENV PS_ENABLE_SSL 1
+ENV PS_ALL_LANGUAGES=${INSTALL_LANGUAGES}
+ENV PS_FOLDER_ADMIN=admin-dev
+ENV PS_FOLDER_INSTALL=install-dev
+ENV DB_SERVER=localhost
+ENV DB_USER=macfly
+ENV PS_ENABLE_SSL=1
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update \
   && apt install -y default-mysql-server ssl-cert \
   && rm -rf /var/lib/apt/lists/*
 
 # XDebug extension
-RUN pecl install xdebug-3.1.6
+RUN pecl install xdebug
 
 # MySQL installation
 # Avoid MySQL questions during installation
@@ -42,7 +40,7 @@ RUN ln -s $APACHE_CONFDIR/sites-available/default-ssl.conf $APACHE_CONFDIR/sites
 EXPOSE 443
 
 RUN echo '[mysql.server]\nservice-startup-timeout = -1' >> /etc/mysql/conf.d/startup.cnf
-RUN service mysql start \
+RUN service mariadb start \
 && mysql -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASSWD'; GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'localhost'; FLUSH PRIVILEGES;" mysql \
 	&& mysqladmin -h $DB_SERVER -P $DB_PORT -u $DB_USER -p$DB_PASSWD create $DB_NAME --force
 
@@ -56,11 +54,11 @@ RUN sed -ie "s/post_max_size\ =\ 20M/post_max_size\ =\ 40M/g" /usr/local/etc/php
 RUN sed -ie "s/upload_max_filesize\ =\ 20M/upload_max_filesize\ =\ 40M/g" /usr/local/etc/php/php.ini
 
 RUN sed -i -e"s/^exec\s*apache2-foreground/#exec apache2-foreground/" /tmp/docker_run.sh
-RUN service mysql start && /tmp/docker_nightly_run.sh
+RUN service mariadb start && /tmp/docker_nightly_run.sh
 RUN sed -i -e"s/^#exec\s*apache2-foreground/exec apache2-foreground/" /tmp/docker_run.sh
 
 COPY config_files/build/shop-build.php /tmp/build/shop-build.php
-RUN service mysql start \
+RUN service mariadb start \
   && runuser -g www-data -u www-data -- php /tmp/build/shop-build.php \
   && runuser -g www-data -u www-data -- php -d memory_limit=-1 bin/console cache:warmup --env=prod
 

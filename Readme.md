@@ -16,10 +16,6 @@ Each tag of this images has the following content:
 * URL rewriting is enabled
 
 For each PrestaShop major version, we chose the best compromise between reliability and speed of PHP.
-* PrestaShop 1.5 with PHP 5.6
-* PrestaShop 1.6 with PHP 7.1
-* PrestaShop 1.7 / Nightly with PHP 7.2
-* PrestaShop 1.7.7 / Beta with PHP 7.3
 
 ## Installation
 
@@ -29,7 +25,7 @@ Images are being stored by default on Docker hub. They can be downloaded with:
 docker pull prestashop/docker-internal-images[:tag]
 ```
 
-Possible values for the tag are: `1.5`, `1.6`, `1.7`, `nightly`. Not providing this parameter will fallback on PrestaShop 1.7.
+Possible values for the tag are: `8`, `1.7`, `1.6`, `1.5`, `nightly`. Not providing this parameter will fallback on the highest stable PrestaShop version.
 
 ## Running this image
 
@@ -46,6 +42,8 @@ docker run -ti -p 8003:80 \
   prestashop/docker-internal-images:8
 
 ```
+
+
 ## Contributing
 
 Changes can be suggested on https://github.com/PrestaShop/docker-internal-images.
@@ -53,6 +51,7 @@ Changes can be suggested on https://github.com/PrestaShop/docker-internal-images
 During the development, you may try to build new local images by running the following commands:
 
 ```bash
+docker build -t prestashop/docker-internal-images:8 8
 docker build -t prestashop/docker-internal-images:1.7 1.7
 docker build -t prestashop/docker-internal-images:1.6 1.6
 docker build -t prestashop/docker-internal-images:1.5 1.5
