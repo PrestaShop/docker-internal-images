@@ -1,4 +1,4 @@
-FROM prestashop/prestashop:8-8.1
+FROM prestashop/prestashop:8
 
 ENV GET_USER=""
 ENV GET_FILE_MODULE=""
