@@ -25,7 +25,7 @@ Images are being stored by default on Docker hub. They can be downloaded with:
 docker pull prestashop/docker-internal-images[:tag]
 ```
 
-Possible values for the tag are: `8`, `1.7`, `1.6`, `1.5`, `nightly`. Not providing this parameter will fallback on the highest stable PrestaShop version.
+Possible values for the tag are: `9`, `8`, `1.7`, `1.6`, `1.5`, `nightly`. Not providing this parameter will fallback on the highest stable PrestaShop version.
 
 ## Running this image
 
@@ -39,7 +39,7 @@ docker run -ti -p 8003:80 \
   -e PS_DOMAIN=localhost:8003 \
   -e PS_TRUSTED_PROXIES=127.0.0.1,REMOTE_ADDR \
   -e PS_ENABLE_SSL=0 \
-  prestashop/docker-internal-images:8
+  prestashop/docker-internal-images:9
 
 ```
 
@@ -51,6 +51,7 @@ Changes can be suggested on https://github.com/PrestaShop/docker-internal-images
 During the development, you may try to build new local images by running the following commands:
 
 ```bash
+docker build -t prestashop/docker-internal-images:9 9
 docker build -t prestashop/docker-internal-images:8 8
 docker build -t prestashop/docker-internal-images:1.7 1.7
 docker build -t prestashop/docker-internal-images:1.6 1.6
