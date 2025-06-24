@@ -13,7 +13,7 @@ foreach (Language::getLanguages() as $language)
     $employee->id_profile = 1;
     $employee->email = 'demo'. $language['iso_code'] .'@prestashop.com';
     $employee->id_lang = $language['id_lang'];
-    $employee->passwd = Tools::hash('prestashop_demo');
+    $employee->setWsPasswd('prestashop_demo');
     $employee->active = 1;
     $employee->optin = 1;
     $employee->firstname = 'Demo';
