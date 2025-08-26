@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ps-versions: ['1.6', '1.7', '8', 'nightly', 'beta']
+        ps-versions: ['1.7', '8', '9', 'nightly']
     steps:
     - uses: actions/checkout@v2
 
