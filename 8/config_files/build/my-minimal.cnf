@@ -2,7 +2,7 @@
 
 bind-address = 0.0.0.0
 
-innodb_buffer_pool_size = 5242880
+innodb_buffer_pool_size = 6M
 innodb_fast_shutdown    = 2
 
 skip-innodb_doublewrite
