@@ -60,6 +60,7 @@ RUN sed -i -e"s/^#exec\s*apache2-foreground/exec apache2-foreground/" /tmp/docke
 COPY config_files/build/shop-build.php /tmp/build/shop-build.php
 RUN service mysql start \
   && runuser -g www-data -u www-data -- php /tmp/build/shop-build.php \
-  && runuser -g www-data -u www-data -- php -d memory_limit=-1 bin/console cache:warmup --env=prod
+  && runuser -g www-data -u www-data -- php -d memory_limit=-1 bin/console cache:warmup --env=prod \
+  && runuser -g www-data -u www-data -- php -d memory_limit=-1 bin/console cache:warmup --env=dev
 
 CMD ["/tmp/docker-customization_run.sh"]
