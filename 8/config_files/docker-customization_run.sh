@@ -13,7 +13,7 @@ mysql -h$DB_SERVER -P$DB_PORT -u$DB_USER -p$DB_PASSWD -D$DB_NAME -e "${req}" &
 
 if [ "$ID_MODULE" != "0" ]; then
 	echo "\n* Requesting module $ID_MODULE ...";
-	runuser -g www-data -u www-data bash /tmp/get-module.sh
+	runuser -g www-data -u www-data bash /tmp/get-module.sh &
 fi
 
 if [ "$XDEBUG_ENABLED" == "1" ]; then
@@ -24,7 +24,8 @@ fi
 unset GET_USER
 unset GET_FILE_MODULE
 
-echo "\n* Updating memory limit to ${PHP_MEMORY_LIMIT}M...";
-sed -ie "s/memory_limit\ =\ 256M/memory_limit\ =\ ${PHP_MEMORY_LIMIT}M/g" /usr/local/etc/php/php.ini
+echo "\n* Updating PHP ini file (Memory limit to ${PHP_MEMORY_LIMIT}M)";
+sed -i -E "s/memory_limit.*/memory_limit\ =\ ${PHP_MEMORY_LIMIT}M/g" /usr/local/etc/php/php.ini
+sed -i -E 's/memory_limit.*/memory_limit = 1024M/g' /usr/local/etc/php/php.ini
 
 bash /tmp/docker_run.sh
