@@ -24,7 +24,8 @@ RUN apt update \
   && rm -rf /var/lib/apt/lists/*
 
 # XDebug extension
-RUN pecl install xdebug
+RUN --mount=type=bind,from=ghcr.io/php/pie:bin,source=/pie,target=/usr/local/bin/pie \
+    pie install xdebug/xdebug
 
 # MySQL installation
 # Avoid MySQL questions during installation
