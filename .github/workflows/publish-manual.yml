@@ -1,0 +1,83 @@
+name: Publish images manually
+
+on:
+  workflow_dispatch:
+    inputs:
+      images:
+        description: 'Image tags to build and push, comma separated (e.g. 8,9,beta). Each tag must match a folder holding a Dockerfile'
+        required: true
+        default: '8,9'
+
+# Shared with docker.yml so two runs never push the same tags at the same time
+concurrency:
+  group: publish-images
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check team membership
+        uses: PrestaShop/.github/.github/actions/team-guard@master
+        with:
+          team_slug: prestashop-sa
+          token: ${{ secrets.JARVIS_TOKEN }}
+
+  assess_images_exist:
+    runs-on: ubuntu-latest
+    needs: guard
+    outputs:
+      images: ${{ steps.set-images.outputs.images }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: set-images
+        env:
+          IMAGES: ${{ inputs.images }}
+        run: |
+          # Every folder holding a Dockerfile is an image tag
+          available=$(for d in */; do [ -f "$d/Dockerfile" ] && echo "${d%/}"; done)
+          selected=$(echo "$IMAGES" | tr ',' '\n' | tr -d ' ')
+          for tag in $selected; do
+            echo "$available" | grep -qx "$tag" || { echo "Unknown image: $tag"; exit 1; }
+          done
+          echo "images=$(printf '%s\n' $selected | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: assess_images_exist
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ${{ fromJson(needs.assess_images_exist.outputs.images) }}
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      - uses: actions/checkout@v7
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Enable multi-platform builds
+        uses: docker/setup-buildx-action@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push ${{ matrix.image }}
+        uses: docker/build-push-action@v7
+        with:
+          context: ${{ matrix.image }}
+          platforms: linux/amd64
+          push: true
+          tags: prestashop/docker-internal-images:${{ matrix.image }}
